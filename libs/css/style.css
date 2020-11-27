@@ -1,0 +1,283 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Oswald", sans-serif;
+    
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    
+}
+
+#mainTitle {
+  color: rgb(106, 195, 255);
+  font-size: 1.5em;
+  
+}
+
+
+
+#mapid {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 8%;
+    bottom: 0;
+    height: 92%;
+    cursor: pointer;
+    z-index: 0;
+    
+    
+
+}
+
+#mapid:active {
+    cursor: grabbing;
+}
+
+/* modal styling */
+
+#modal {
+    display: none;
+    color: white;
+    height: 92%;
+    position: relative;
+    margin: 0 auto;
+    width: 40%;
+    background-color: #222;
+    opacity: 0.9;
+    box-shadow: 8px 8px 5px rgb(65, 65, 65);
+    padding: 20px;
+    z-index: 5;
+    float: right;
+    text-align: center;
+    overflow-y: scroll;
+    
+}
+
+#modal #modalHeader {
+  font-size: 2.2em;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  
+  
+}
+
+#modal #modalHeader #imgContainer {
+  float: right;
+  
+}
+
+#modal #modalInfoBox {
+  text-align: left;
+  margin: 0 4%;
+}
+
+#modal .modalRule {
+  margin: 2% 0;
+  color: rgb(233, 233, 233);
+}
+
+#modal #modalInfoBox .modalBox {
+  width: 100%;
+  font-size: 1.2em;
+  
+}
+
+#modal #modalInfoBox h1 {
+  margin-bottom: 2%;
+  font-size: 1.5em;
+}
+
+#modalInfoBox ul li {
+  margin: 1px;
+}
+
+
+
+@media only screen and (max-width: 480px) {
+  #modal {
+    height: 70%;
+    width: 80%;
+    margin: 10% auto;
+    float:  none;
+  }   
+
+  #modalHeader {
+    font-size: 1.2em;
+  }
+
+  #modalHeader #modalTitle {
+    margin: 2%;
+  }
+
+  body {
+    font-size: 0.6em;
+  }
+
+  #mainTitle {
+    font-size: 1em;
+  }
+
+  
+
+  #flag {
+    height: 65%;
+  }
+
+  
+}
+
+@media only screen and (max-width: 1600px) {
+  #mainTitle {
+    font-size: 1em;
+  }
+}
+
+#modalCross {
+    float: left;
+    padding: 5px 8px;
+    font-weight: bolder;
+    color: black;
+    background-color: white;
+    border: 2px solid white;
+    margin: 2px;
+    height: min-content;
+    width: min-content;
+    font-size: 0.8em;
+    
+}
+
+#modalCross:hover {
+    background-color: #222;
+    color: white;
+    cursor: pointer;
+    
+}
+
+.modalBox {
+  display: inline-block;
+}
+
+#ul1div, #ul2div {
+  display: inline-block;
+  width: 48%;
+}
+
+
+
+
+.navbar {
+    overflow: hidden;
+    background-color: #333;
+    height: 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.4em;
+    
+    
+  }
+
+  
+  
+  .navbar a {
+    float: left;
+    font-size: inherit;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    
+  }
+
+  .navbar a {
+      border-radius: 2px;
+      
+  }
+  
+
+
+  .navbar > a {
+      margin: 0 2.5%;
+  }
+
+  
+  .navbar a:hover {
+    background-color: rgb(126, 126, 126);
+    color: black;
+    cursor: pointer;
+  }
+  
+
+
+/* Select dropdown styling */
+
+.custom-select {
+  font-family: inherit;
+  margin-right: 1100px;
+  max-width: 50px;
+}
+
+.custom-select select {
+  background-color: #333;
+  border: none;
+  padding: 14px 16px;
+  font-family: inherit;
+  color: white;
+  border-radius: 2px;
+  
+  font-size: 1.1em;
+}
+
+.custom-select select:hover {
+  cursor: pointer;
+  background-color: rgb(126, 126, 126);
+  color: black;
+}
+
+.custom-select select:focus {
+  background-color: rgb(126, 126, 126);
+  cursor: pointer;
+  color: black;
+  
+}
+
+.custom-select select:focus #firstOption {
+  display: none;
+}
+
+.custom-select select option:hover {
+  cursor: pointer;
+  
+}
+
+.custom-select select option {
+    text-align: center;
+    padding: 50px;
+    
+}
+
+
+.custom-select select:focus {  /* removes black outline from select */
+  outline: 0;
+}
+
+.custom-select select {   /* removes default arrow from select */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+
+
+
+
+
+  

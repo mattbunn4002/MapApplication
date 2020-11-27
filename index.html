@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+        <title>Matt's Maps!</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+        <link rel="shortcut icon" href="libs\img\favicon.ico" type="image/x-icon" />  
+        <link rel="stylesheet" href="libs/css/style.css">
+    </head>
+    <body>
+        <div class="navbar">
+
+            <a href="index.html" id="mainTitle">Matt's Maps!</a>
+            
+            
+            <div class="dropdown">
+                
+               
+                
+             
+
+              <div class="custom-select" style="width:200px;">
+                
+                <select id="innerSelect">
+                  <option id="firstOption" value="0">Country List ▿</option>
+                  
+                  
+                </select>
+              </div>
+
+              
+            </div> 
+
+
+          </div>
+
+
+
+
+
+
+        <div id="mapid"></div>
+
+
+        <div id="modal">
+          <div id="modalHeader">
+            <div id="modalCross">X</div> 
+            <div id="modalTitle" class="modalBox"></div>
+            <div id="imgContainer" class="modalBox">
+                <img id="flag" src="">
+            </div>
+          </div>
+
+          <hr class="modalRule">
+          <div id="modalInfoBox">
+            
+            <div id="generalInfo" class="modalBox">
+              <h1>General Info:</h1>
+              <div id="ul1div">
+                <ul>
+                  <li>Region: <span id="region"></span></li>                  
+                  <li>Country Code: <span id="countryCode"></span></li>                  
+                  <li>Currency: <span id="currency"></span></li>                  
+                  <li>Income Level: <span id="income"></span></li>
+                  <li>Start of Week: <span id="weekStart"></span></li>
+                  <li>Population: <span id="population"></span></li>
+                  
+                </ul>
+              </div>
+              <div id="ul2div">
+                <ul>
+                  <li>Subregion: <span id="subregion"></span></li>
+                  <li>Capital City: <span id="capital"></span></li>
+                  <li>Nationality: <span id="nationality"></span></li>
+                  <li>Main Language: <span id="language"></span></li>
+                  <li>Telephone Prefix: <span id="telPrefix"></span></li>
+                  
+                </ul>
+              </div>
+              
+            </div>
+            <hr class="modalRule">
+            <div id="weatherInfo" class="modalBox">
+              <h1>Weather Information:</h1>
+              <div id="ul1div">
+                <ul>
+                  <li>Temperature: <span id="region"></span></li>                  
+                                    
+                  
+                  
+                </ul>
+              </div>
+              <div id="ul2div">
+                <ul>
+                  <li>Cloud Coverage: <span id="countryCode"></span></li>                  
+                  <li>Humidity <span id="currency"></span></li>
+                  
+                </ul>
+              </div>
+              
+            </div>
+            <hr class="modalRule">
+
+
+          </div>
+        </div>
+        
+
+
+
+
+
+
+
+
+
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+        <script src="libs/js/jquery-2.2.3.min.js"></script> 
+        <script src="libs/js/script.js"></script>
+        
+    </body>
+</html>
