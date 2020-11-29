@@ -1,9 +1,9 @@
-
 <?php 
 
 $executionStartTime = microtime(true) / 1000;
 
-$url= "https://restcountries.eu/rest/v2/name/" . rawurlencode($_REQUEST["countryName"]);
+$url = 'http://newsapi.org/v2/everything?' . 'q=' . rawurlencode($_REQUEST["capital"]) . '&' . 'from=' . rawurlencode(date("Y-m-d")) .'&' . 'sortBy=popularity&' .
+'apiKey=0c79c117ea2141aaba7afe8948fa80ea';
 
 
 

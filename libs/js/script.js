@@ -24,7 +24,23 @@ function findFeatureFromName(countryName) {
     return countryFeature;
 }
 
-
+function articleDisplayFunc(articleArray) {
+    if (articleArray[0]) {
+        $("#articleOne").css("display", "block");
+    } else {
+        $("#articleOne").css("display", "none");
+    }
+    if (articleArray[1]) {
+        $("#articleTwo").css("display", "block");
+    } else {
+        $("#articleTwo").css("display", "none");
+    }
+    if (articleArray[2]) {
+        $("#articleThree").css("display", "block");
+    } else {
+        $("#articleThree").css("display", "none");
+    }
+}
 
 
 
@@ -92,12 +108,22 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
     if (countryName == "The Netherlands") {   //Janky fix for "(The) Netherlands" naming problem.
         countryName = "Netherlands";
     }
-    console.log(countryFeature);
+    if (countryName == "Democratic Republic of the Congo" || countryName == "Republic of the Congo") {    
+        countryName = "Congo";            //Fix for problems caused by congo being named different things in different apis.
+    }
+    if (countryName == "South Korea") {
+        countryName = "Korea (Republic of)";
+    }
+    if (countryName == "North Korea") {
+        countryName = "Korea (Democratic People's Republic of)";
+    }
+    
 
 
     $.ajax({            
         url: "libs/php/getBasicInfo.php",      //Gets info for general info section.
         type: "GET",
+        async: false,
         dataType: "json",
         data: {
             countryCode: countryCode,
@@ -122,14 +148,19 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
         url: "libs/php/getMoreBasicInfo.php",                   //Gets more info for general info section.
         type: "GET",
         dataType: "json",
+        async: false,
         data: {
             countryName: countryName,
         },
         success: function(result) {
+            
 
             if (result.status.name == "ok") {
-                if (countryName == "India") {                   //Fix for weird india json entry in api.
+                if (countryName == "India" || countryName == "South Korea") {                   //Fix for weird india json entry in api.
                     capital = result["data"][1]["capital"];
+                    
+                    
+                    
                     $("#language").html(result["data"][1]["languages"][0]["name"]);
                     $("#capital").html(capital);
                     $("#population").html(result["data"][1]["population"].toLocaleString('en', {useGrouping:true}));
@@ -147,7 +178,8 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
             console.log(errorThrown);
         }
         
-    })
+    });
+    
 
     $.ajax({            
         url: "libs/php/getWeatherInfo.php",              //Gets weather info for weather info section.
@@ -159,15 +191,107 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
         success: function(result) {
             
             if (result.status.name == "ok") {
-                console.log(result);
                 
+                $("#weatherCapital").html(capital);
+                $("#condition").html(result["data"]["current"]["condition"]["text"]);
+                $("#conditionImg").attr("src", result["data"]["current"]["condition"]["icon"]);
+                $("#temp").html(result["data"]["current"]["temp_c"]);
+                $("#windSpeed").html(result["data"]["current"]["wind_mph"]);
+                $("#humidity").html(result["data"]["current"]["humidity"]);
+                $("#windDir").html(result["data"]["current"]["wind_dir"]);
+                $("#feelsLike").html(result["data"]["current"]["feelslike_c"]);
+                $("#vis").html(result["data"]["current"]["vis_miles"]);
+                $("#pressure").html(result["data"]["current"]["pressure_mb"]);
+                $("#precip").html(result["data"]["current"]["precip_mm"]);
+                if (result["data"]["current"]["is_day"] == 1) {
+                    $("#isDay").html("Yes");
+                } else {
+                    $("#isDay").html("No");
+                }
             }
                 
         }, error: function(jqXHR, textStatus, errorThrown) {
             console.log(errorThrown);
         }
         
-    })
+    });
+
+    $.ajax({            
+        url: "libs/php/getTimezoneInfo.php",              //Gets timezone info for timezone info section.
+        type: "GET",
+        dataType: "json",
+        data: {
+            lat: lat,
+            lng: lng
+        },
+        success: function(result) {
+            
+            if (result.status.name == "ok") {
+                $("#timezoneCapital").html(capital);
+                $("#localTime").html(result["data"]["time"]);
+                $("#timezoneId").html(result["data"]["timezoneId"]);
+                $("#gmtOffset").html(result["data"]["gmtOffset"]);
+                $("#sunrise").html(result["data"]["sunrise"]);
+                $("#sunset").html(result["data"]["sunset"]);
+            }
+                
+        }, error: function(jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+        }
+        
+    });
+
+    
+    
+    
+
+    $.ajax({            
+        url: "libs/php/getNewsInfo.php",              //Gets news info for news section.
+        type: "GET",
+        dataType: "json",
+        data: {
+            capital: capital
+        },
+        success: function(result) {
+            
+            if (result.status.name == "ok") {
+                
+                
+
+                articleDisplayFunc(result["data"]["articles"]);
+                if (result["data"]["articles"][0]) {
+                    $("#articleOneTitle").html(result["data"]["articles"][0]["title"]);
+                    $("#articleOneAuthor").html(result["data"]["articles"][0]["author"]);
+                    $("#articleOneLink").attr("href", result["data"]["articles"][0]["url"]);
+                    $("#articleOneLink").html(result["data"]["articles"][0]["url"]);
+                    $("#articleOneContent").html(result["data"]["articles"][0]["description"]);
+
+                    if (result["data"]["articles"][1]) {
+                        $("#articleTwoTitle").html(result["data"]["articles"][1]["title"]);
+                        $("#articleTwoAuthor").html(result["data"]["articles"][1]["author"]);
+                        $("#articleTwoLink").attr("href", result["data"]["articles"][1]["url"]);
+                        $("#articleTwoLink").html(result["data"]["articles"][1]["url"]);
+                        $("#articleTwoContent").html(result["data"]["articles"][1]["description"]);
+                    
+                        if (result["data"]["articles"][2]) {
+                            $("#articleThreeTitle").html(result["data"]["articles"][2]["title"]);
+                            $("#articleThreeAuthor").html(result["data"]["articles"][2]["author"]);
+                            $("#articleThreeLink").attr("href", result["data"]["articles"][2]["url"]);
+                            $("#articleThreeLink").html(result["data"]["articles"][2]["url"]);
+                            $("#articleThreeContent").html(result["data"]["articles"][2]["description"]);
+                        }   
+                    }
+                }
+            }
+                
+        }, error: function(jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+            
+        }
+        
+    });
+
+
 
 
 

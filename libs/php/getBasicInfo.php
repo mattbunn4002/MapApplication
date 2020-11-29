@@ -2,7 +2,7 @@
 
 $executionStartTime = microtime(true) / 1000;
 
-$url= "api.ipgeolocationapi.com/countries/" . $_REQUEST["countryCode"];
+$url= "api.ipgeolocationapi.com/countries/" . rawurlencode($_REQUEST["countryCode"]);
 
 
 

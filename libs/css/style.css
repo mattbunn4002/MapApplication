@@ -170,6 +170,35 @@ html, body {
   width: 48%;
 }
 
+#conditionImg {
+  width: 10%;
+  margin-left: 4%;
+}
+
+#localTime, #sunrise, #sunset {
+  font-size: 0.8em;
+}
+
+.articleTitle, .articleSubtitle, .articleContent, .articleAuthor, .articleLink {
+  font-family: "Bree Serif", serif;
+}
+
+.articleLink {
+  font-size: 0.55em;
+  color: blue;
+  text-align: right;
+}
+
+.article {
+  margin-top: 5%;
+  padding: 3%;
+  background-color: rgb(165, 165, 165);
+  color: black;
+  border-radius: 1px;
+  box-shadow: black 5px 5px 5px;
+}
+
+
 
 
 
@@ -232,8 +261,7 @@ html, body {
   font-family: inherit;
   color: white;
   border-radius: 2px;
-  
-  font-size: 1.1em;
+  font-size: 1.3em;
 }
 
 .custom-select select:hover {

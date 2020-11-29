@@ -4,13 +4,14 @@
     <head>
         <meta charset="utf-8">
         
-        <title>Matt's Maps!</title>
+        <title>Mapro</title>
         
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
         <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
 
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -21,7 +22,7 @@
     <body>
         <div class="navbar">
 
-            <a href="index.html" id="mainTitle">Matt's Maps!</a>
+            <a href="index.html" id="mainTitle">Mapro</a>
             
             
             <div class="dropdown">
@@ -72,7 +73,6 @@
                   <li>Region: <span id="region"></span></li>                  
                   <li>Country Code: <span id="countryCode"></span></li>                  
                   <li>Currency: <span id="currency"></span></li>                  
-                  <li>Income Level: <span id="income"></span></li>
                   <li>Start of Week: <span id="weekStart"></span></li>
                   <li>Population: <span id="population"></span></li>
                   
@@ -84,7 +84,6 @@
                   <li>Capital City: <span id="capital"></span></li>
                   <li>Nationality: <span id="nationality"></span></li>
                   <li>Main Language: <span id="language"></span></li>
-                  <li>Telephone Prefix: <span id="telPrefix"></span></li>
                   
                 </ul>
               </div>
@@ -92,26 +91,65 @@
             </div>
             <hr class="modalRule">
             <div id="weatherInfo" class="modalBox">
-              <h1>Weather Information:</h1>
+              <h1>Weather Information for <span id="weatherCapital"></span> (Capital City): </h1>
               <div id="ul1div">
-                <ul>
-                  <li>Temperature: <span id="region"></span></li>                  
-                                    
-                  
-                  
+                <ul>        
+                  <li>Condition: <span id="condition"></span> <img id="conditionImg" src="" ></li>       
+                  <li>Temperature: <span id="temp"></span> °C</li>  
+                  <li>Wind Speed: <span id="windSpeed"></span> mph</li>
+                  <li>Visibility Distance: <span id="vis"></span> miles</li>
+                  <li>Is Day: <span id="isDay"></span></li>
                 </ul>
               </div>
               <div id="ul2div">
                 <ul>
-                  <li>Cloud Coverage: <span id="countryCode"></span></li>                  
-                  <li>Humidity <span id="currency"></span></li>
-                  
+                  <li>Humidity: <span id="humidity"></span>%</li>                  
+                  <li>Feels like: <span id="feelsLike"></span> °C</li>
+                  <li>Wind Direction: <span id="windDir"></span></li>
+                  <li>Pressure: <span id="pressure"></span> mb</li>
+                  <li>Precipitation: <span id="precip"></span> mm</li>
                 </ul>
               </div>
               
             </div>
             <hr class="modalRule">
+            <div id="timezoneInfo" class="modalBox">
+              <h1>Timezone Information for <span id="timezoneCapital"></span> (Capital City): </h1>
+              <div id="ul1div">
+                <ul>        
+                  <li>Local Time: <span id="localTime"></span></li>
+                  <li>Sunrise: <span id="sunrise"></span></li>
+                  <li>Sunset: <span id="sunset"></span></li>    
+                </ul>
+              </div>
+              <div id="ul2div">
+                <ul>
+                  <li>Timezone ID: <span id="timezoneId"></span></li>
+                  <li>GMT Offset: <span id="gmtOffset"></span> hrs</li>
+                </ul>
+              </div>
+              
+            </div>
+            <hr class="modalRule">
+            <div id="newsInfo" class="modalBox">
+              <h1>Top Related News Articles: </h1>
+                <div id="articleOne" class="article">
+                  <h2 class="articleTitle" id="articleOneTitle"></h2>
+                  <h3 class = "articleSubtitle"><span id="articleOneAuthor" class="articleAuthor"></span><br><a target="blank" class="articleLink" id="articleOneLink" href=""></a></h3>
+                  <p id="articleOneContent" class="articleContent"></p>
+                </div>
+                <div id="articleTwo" class="article">
+                  <h2 class="articleTitle" id="articleTwoTitle"></h2>
+                  <h3 class = "articleSubtitle"><span id="articleTwoAuthor" class="articleAuthor"></span><br><a target="blank" class="articleLink" id="articleTwoLink" href=""></a></h3>
+                  <p id="articleTwoContent" class="articleContent"></p>
+                </div>
+                <div id="articleThree" class="article">
+                  <h2 class="articleTitle" id="articleThreeTitle"></h2>
+                  <h3 class = "articleSubtitle"><span id="articleThreeAuthor" class="articleAuthor"></span><br><a target="blank" class="articleLink" id="articleThreeLink" href=""></a></h3>
+                  <p id="articleThreeContent" class="articleContent"></p>
+                </div>
 
+            </div>
 
           </div>
         </div>

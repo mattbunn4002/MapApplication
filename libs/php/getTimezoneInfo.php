@@ -1,17 +1,14 @@
-
 <?php 
 
 $executionStartTime = microtime(true) / 1000;
 
-$url= "https://restcountries.eu/rest/v2/name/" . rawurlencode($_REQUEST["countryName"]);
-
-
+$url = "http://api.geonames.org/timezoneJSON?lat=" . rawurlencode($_REQUEST["lat"]) . "&lng=". rawurlencode($_REQUEST["lng"]) . "&username=mattbunn4002";
 
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_URL,$url);
+curl_setopt($ch, CURLOPT_URL, $url);
 
 $result=curl_exec($ch);
 

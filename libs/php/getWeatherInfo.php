@@ -2,14 +2,13 @@
 
 $executionStartTime = microtime(true) / 1000;
 
-$url = "api.openweathermap.org/data/2.5/weather?q=" . $_REQUEST["capital"] . "&appid=11a98f0957c40883cd00f626d7aec5ea";
-
+$url = "http://api.weatherapi.com/v1/current.json?key=b92cdd6f414d4e1089d130020202911&q=" . rawurlencode($_REQUEST["capital"]);
 
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_URL,$url);
+curl_setopt($ch, CURLOPT_URL, $url);
 
 $result=curl_exec($ch);
 
