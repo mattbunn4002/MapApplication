@@ -1,9 +1,31 @@
 let northEast = L.latLng(84.7, 178);
 let southWest = L.latLng(-84.7, -178);      
 let bounds = L.latLngBounds(southWest, northEast);    //Defines bounds for map so it doesn't repeat and cause problems with coords out of correct range.
-let mymap = L.map("mapid", {minZoom: 4, maxZoom: 15, worldCopyJump: true}).setView([51.5074, 0.1278], 7);    //Defines map and map marker.
-let marker;
+let mymap = L.map("mapid", {minZoom: 3, maxZoom: 15, worldCopyJump: true}).setView([51.5074, 0.1278], 7);    //Defines map and map marker.
 let border;
+let capitalsCoords = [];
+
+$.getJSON("libs/capitalCities.json", function(data) {
+    for (let i=0;i< data.length; i++) {
+        let coords = [data[i]["CapitalName"], data[i]["CapitalLatitude"], data[i]["CapitalLongitude"]];
+        capitalsCoords.push(coords);
+    }
+    
+});
+
+console.log(capitalsCoords);
+
+capitalsCoords.forEach(entry => {
+    console.log("test");
+    marker = new L.marker([entry[1], entry[2]])
+      .bindPopup(entry[0])
+      .addTo(mymap);
+});
+    
+      
+
+
+
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -24,18 +46,34 @@ function findFeatureFromName(countryName) {
     return countryFeature;
 }
 
+function temperatureColorFunc(temp_c) {
+    if (temp_c <= -20) {
+        return "rgb(0,255,255)";
+    } else if (temp_c <= 0) {
+        return "rgb(0, 128, 255)";
+    } else if (temp_c <= 10) {
+        return "rgb(255,255,102)";
+    } else if (temp_c <= 20) {
+        return "rgb(255,200, 1)";
+    } else if (temp_c <= 30) {
+        return "rgb(255, 128, 0)";
+    } else {
+        return "rgb(204, 0, 0)";
+    }
+}
+
 function articleDisplayFunc(articleArray) {
     if (articleArray[0]) {
         $("#articleOne").css("display", "block");
     } else {
         $("#articleOne").css("display", "none");
     }
-    if (articleArray[1]) {
+    if (articleArray[5]) {
         $("#articleTwo").css("display", "block");
     } else {
         $("#articleTwo").css("display", "none");
     }
-    if (articleArray[2]) {
+    if (articleArray[10]) {
         $("#articleThree").css("display", "block");
     } else {
         $("#articleThree").css("display", "none");
@@ -46,16 +84,10 @@ function articleDisplayFunc(articleArray) {
 
 function onMapClick(e) {      //Handles clicking on the map.
     
-
-    if (marker) {
-        mymap.removeLayer(marker);
+    if ((parseInt(window.innerWidth) <= 480) && ($("#modal").css("display") != "none")) {   
+        $("#modal").fadeOut(200); 
+        return;                                        //On mobile screens when tapping outside boundary of modal the modal should fade out.
     }
-    marker = new L.marker()
-    .setLatLng(e.latlng.wrap())
-    .addTo(mymap);
-    
-
-    
 
     $.ajax({            //AJAX call to php file that gets country name from openCage after providing the coords.
         url: "libs/php/getCountryNameFromCoords.php",
@@ -67,6 +99,7 @@ function onMapClick(e) {      //Handles clicking on the map.
             
         },
         success: function(result) {
+            
 
             if (result.status.name == "ok") {
                 
@@ -96,13 +129,13 @@ mymap.on("click", onMapClick);    //Binds onMapClick to click events on the map.
 
 function updateModal(countryName) {   /* Changes the content of the modal (does not make it fade in) */
     $("#modalTitle").html(countryName);
-    
+    console.log(countryName);
     let countryFeature = findFeatureFromName(countryName);
     let lat;
     let lng;
     let capital;
     let countryCode = countryFeature["properties"]["iso_a2"];
-    let flagURL = "https://www.countryflags.io/" + countryCode + "/shiny/64.png";
+    let flagURL = "libs/img/flags/flags/48/" + countryName + ".png";
     $('#flag').attr('src', flagURL);
 
     if (countryName == "The Netherlands") {   //Janky fix for "(The) Netherlands" naming problem.
@@ -129,7 +162,7 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
             countryCode: countryCode,
         },
         success: function(result) {
-
+           
             if (result.status.name == "ok") {
                 
                 $("#region").html(result["data"]["continent"]);
@@ -158,7 +191,6 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
             if (result.status.name == "ok") {
                 if (countryName == "India" || countryName == "South Korea") {                   //Fix for weird india json entry in api.
                     capital = result["data"][1]["capital"];
-                    
                     
                     
                     $("#language").html(result["data"][1]["languages"][0]["name"]);
@@ -196,17 +228,20 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
                 $("#condition").html(result["data"]["current"]["condition"]["text"]);
                 $("#conditionImg").attr("src", result["data"]["current"]["condition"]["icon"]);
                 $("#temp").html(result["data"]["current"]["temp_c"]);
+                $("#tempSymbol").css("color", temperatureColorFunc(result["data"]["current"]["temp_c"]));
                 $("#windSpeed").html(result["data"]["current"]["wind_mph"]);
                 $("#humidity").html(result["data"]["current"]["humidity"]);
+                $("#humidity").attr("value", result["data"]["current"]["humidity"]);
                 $("#windDir").html(result["data"]["current"]["wind_dir"]);
                 $("#feelsLike").html(result["data"]["current"]["feelslike_c"]);
+                $("#feelsLikeSymbol").css("color", temperatureColorFunc(result["data"]["current"]["feelslike_c"]));
                 $("#vis").html(result["data"]["current"]["vis_miles"]);
                 $("#pressure").html(result["data"]["current"]["pressure_mb"]);
                 $("#precip").html(result["data"]["current"]["precip_mm"]);
                 if (result["data"]["current"]["is_day"] == 1) {
-                    $("#isDay").html("Yes");
+                    $("#isDay").attr("src", "libs/img/tick.png");
                 } else {
-                    $("#isDay").html("No");
+                    $("#isDay").attr("src", "libs/img/redCross.png");
                 }
             }
                 
@@ -265,20 +300,23 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
                     $("#articleOneLink").attr("href", result["data"]["articles"][0]["url"]);
                     $("#articleOneLink").html(result["data"]["articles"][0]["url"]);
                     $("#articleOneContent").html(result["data"]["articles"][0]["description"]);
+                    $("#articleOneImg").attr("src", result["data"]["articles"][0]["urlToImage"]);
 
-                    if (result["data"]["articles"][1]) {
-                        $("#articleTwoTitle").html(result["data"]["articles"][1]["title"]);
-                        $("#articleTwoAuthor").html(result["data"]["articles"][1]["author"]);
-                        $("#articleTwoLink").attr("href", result["data"]["articles"][1]["url"]);
-                        $("#articleTwoLink").html(result["data"]["articles"][1]["url"]);
-                        $("#articleTwoContent").html(result["data"]["articles"][1]["description"]);
+                    if (result["data"]["articles"][5]) {
+                        $("#articleTwoTitle").html(result["data"]["articles"][5]["title"]);
+                        $("#articleTwoAuthor").html(result["data"]["articles"][5]["author"]);
+                        $("#articleTwoLink").attr("href", result["data"]["articles"][5]["url"]);
+                        $("#articleTwoLink").html(result["data"]["articles"][5]["url"]);
+                        $("#articleTwoContent").html(result["data"]["articles"][5]["description"]);
+                        $("#articleTwoImg").attr("src", result["data"]["articles"][5]["urlToImage"]);
                     
-                        if (result["data"]["articles"][2]) {
-                            $("#articleThreeTitle").html(result["data"]["articles"][2]["title"]);
-                            $("#articleThreeAuthor").html(result["data"]["articles"][2]["author"]);
-                            $("#articleThreeLink").attr("href", result["data"]["articles"][2]["url"]);
-                            $("#articleThreeLink").html(result["data"]["articles"][2]["url"]);
-                            $("#articleThreeContent").html(result["data"]["articles"][2]["description"]);
+                        if (result["data"]["articles"][8]) {
+                            $("#articleThreeTitle").html(result["data"]["articles"][10]["title"]);
+                            $("#articleThreeAuthor").html(result["data"]["articles"][10]["author"]);
+                            $("#articleThreeLink").attr("href", result["data"]["articles"][10]["url"]);
+                            $("#articleThreeLink").html(result["data"]["articles"][10]["url"]);
+                            $("#articleThreeContent").html(result["data"]["articles"][10]["description"]);
+                            $("#articleThreeImg").attr("src", result["data"]["articles"][10]["urlToImage"]);
                         }   
                     }
                 }
@@ -292,7 +330,40 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
     });
 
 
+    $.ajax({            //Gets weather info for weather info section.
+        url: "libs/php/getForecastInfo.php",              
+        type: "GET",
+        dataType: "json",
+        data: {
+            capital: capital,
+        },
+        success: function(result) {
+            
+            if (result.status.name == "ok") {
+                const today = new Date();
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
 
+                $("#tomorrowDate").html(tomorrow.toDateString());
+                $("#fConditionImg").attr("src", result["data"]["forecast"]["forecastday"][1]["day"]["condition"]["icon"]);
+                $("#fAvTemp").html(result["data"]["forecast"]["forecastday"][1]["day"]["avgtemp_c"]);
+                $("#fAvTempSymbol").css("color", temperatureColorFunc(result["data"]["forecast"]["forecastday"][1]["day"]["avgtemp_c"]));
+                $("#fMaxTemp").html(result["data"]["forecast"]["forecastday"][1]["day"]["maxtemp_c"]);
+                $("#fMaxTempSymbol").css("color", temperatureColorFunc(result["data"]["forecast"]["forecastday"][1]["day"]["maxtemp_c"]));
+                $("#fCapital").html(capital);
+                $("#fHumidity").html(result["data"]["forecast"]["forecastday"][1]["day"]["avghumidity"]);
+                $("#fHumidity").attr("value", result["data"]["forecast"]["forecastday"][1]["day"]["avghumidity"]);
+                $("#rainChance").html(result["data"]["forecast"]["forecastday"][1]["day"]["daily_chance_of_rain"]);
+                $("#rainChance").attr("value", result["data"]["forecast"]["forecastday"][1]["day"]["daily_chance_of_rain"]);
+                $("#snowChance").html(result["data"]["forecast"]["forecastday"][1]["day"]["daily_chance_of_snow"]);
+                $("#snowChance").attr("value", result["data"]["forecast"]["forecastday"][1]["day"]["daily_chance_of_snow"]);
+            }
+                
+        }, error: function(jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+        }
+        
+    });
 
 
 }
@@ -330,7 +401,6 @@ $(document).ready( () => {
 
                     for (let i=0; i < features.length; i++) {
                         countryList.push(features[i]["properties"]["name"]);
-                        
                     }
                     
                     countryList.sort();  /* makes the country list alphabetical */
@@ -357,6 +427,8 @@ $(document).ready( () => {
             console.log(errorThrown);
         }
     })
+                                                        //Add another ajax call here that finds coords of all capital cities and put them in an array
+
 })
 
 
@@ -383,7 +455,7 @@ $("#innerSelect").on("change", () => {     //Handles changing the country select
             if (result.status.name == "ok") {
                 
                 mymap.panTo(new L.LatLng(result["data"][0]["geometry"]["lat"] , result["data"][0]["geometry"]["lng"]))
-
+                
             }
         
         },
@@ -399,7 +471,6 @@ $("#innerSelect").on("change", () => {     //Handles changing the country select
 /* Function responsible for adding border to a given country */
 function addCountryBorder(countryName) {
     
-
     $.ajax({
         url: "libs/countryBorders.geo.json",
         type: "GET",
@@ -415,9 +486,16 @@ function addCountryBorder(countryName) {
             if (border) {
                 mymap.removeLayer(border);
             }
-            border = new L.geoJSON(countryFeature["geometry"]).addTo(mymap);
+            border = new L.geoJSON(countryFeature["geometry"], {
+                style: {
+                color: "black",
+                
+                }
+            }
+                ).addTo(mymap);
             
-
+            mymap.panTo(border.getBounds().getCenter());
+            mymap.fitBounds(border.getBounds());
 
 
         },

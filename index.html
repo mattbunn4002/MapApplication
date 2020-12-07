@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         
-        <title>Mapro</title>
+        <title>Gazetteer</title>
         
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
@@ -22,7 +22,7 @@
     <body>
         <div class="navbar">
 
-            <a href="index.html" id="mainTitle">Mapro</a>
+            <a href="index.html" id="mainTitle">Gazetteer</a>
             
             
             <div class="dropdown">
@@ -54,6 +54,7 @@
         <div id="mapid"></div>
 
 
+        
         <div id="modal">
           <div id="modalHeader">
             <div id="modalCross">X</div> 
@@ -63,9 +64,9 @@
             </div>
           </div>
 
-          <hr class="modalRule">
+          
           <div id="modalInfoBox">
-            
+            <hr class="modalRule">
             <div id="generalInfo" class="modalBox">
               <h1>General Info:</h1>
               <div id="ul1div">
@@ -91,23 +92,44 @@
             </div>
             <hr class="modalRule">
             <div id="weatherInfo" class="modalBox">
-              <h1>Weather Information for <span id="weatherCapital"></span> (Capital City): </h1>
+              <h1>Current weather Information for <span id="weatherCapital"></span> (Capital City): </h1>
               <div id="ul1div">
                 <ul>        
-                  <li>Condition: <span id="condition"></span> <img id="conditionImg" src="" ></li>       
-                  <li>Temperature: <span id="temp"></span> °C</li>  
-                  <li>Wind Speed: <span id="windSpeed"></span> mph</li>
-                  <li>Visibility Distance: <span id="vis"></span> miles</li>
-                  <li>Is Day: <span id="isDay"></span></li>
+                  <li>Condition: <img id="conditionImg" class="conditionImg" src="" ></li>       
+                  <li>Temperature:    <span id="temp"></span>°C<span id="tempSymbol" class="tempSymbol">●</span>   </li>  
+                  <li>Wind Speed:    <span id="windSpeed"></span> mph</li>
+                  <li>Visibility Distance:    <span id="vis"></span> miles</li>
+                  <li>Is Day:    <img id="isDay" src=""></li>
                 </ul>
               </div>
               <div id="ul2div">
                 <ul>
-                  <li>Humidity: <span id="humidity"></span>%</li>                  
-                  <li>Feels like: <span id="feelsLike"></span> °C</li>
-                  <li>Wind Direction: <span id="windDir"></span></li>
-                  <li>Pressure: <span id="pressure"></span> mb</li>
-                  <li>Precipitation: <span id="precip"></span> mm</li>
+                  <li>Humidity:    <progress id="humidity" value="" max="100" width="2%">  </progress> </li>                  
+                  <li>Feels like:    <span id="feelsLike"></span> °C <span id="feelsLikeSymbol" class="feelsLikeSymbol">●</span></li>
+                  <li>Wind Direction:    <span id="windDir"></span></li>
+                  <li>Pressure:    <span id="pressure"></span> mb</li>
+                  <li>Precipitation:    <span id="precip"></span> mm</li>
+                </ul>
+              </div>
+              
+            </div>
+            <hr class="modalRule">
+            <div id="forecastInfo" class="modalBox">
+              <h1>Weather Forecast for <span id="fCapital"></span> (Capital City) on <span id="tomorrowDate"></span>: </h1>
+              <div id="ul1div">
+                <ul>        
+                  <li>Condition: <img id="fConditionImg" class="conditionImg" src="" ></li>       
+                  <li>Avg Temp:    <span id="fAvTemp"></span>°C<span id="fAvTempSymbol" class="tempSymbol">●</span> </li>
+                  <li>Chance of Rain: <progress id="rainChance" value="" max="100" width="2%">  </progress></li>
+                  
+                </ul>
+              </div>
+              <div id="ul2div">
+                <ul>
+                  <li>Chance of Snow: <progress id="snowChance" value="" max="100" width="2%">  </progress></li>
+                  <li>Max Temp:    <span id="fMaxTemp"></span>°C<span id="fMaxTempSymbol" class="tempSymbol">●</span> </li>
+                  <li>Avg Humidity: <progress id="fHumidity" value="" max="100" width="2%">  </progress></li>
+                   
                 </ul>
               </div>
               
@@ -134,24 +156,29 @@
             <div id="newsInfo" class="modalBox">
               <h1>Top Related News Articles: </h1>
                 <div id="articleOne" class="article">
-                  <h2 class="articleTitle" id="articleOneTitle"></h2>
+                  <h2 class="articleTitle" id="articleOneTitle"></h2> <img id="articleOneImg" class="articleImg" src="">
                   <h3 class = "articleSubtitle"><span id="articleOneAuthor" class="articleAuthor"></span><br><a target="blank" class="articleLink" id="articleOneLink" href=""></a></h3>
-                  <p id="articleOneContent" class="articleContent"></p>
+                  <p id="articleOneContent" class="articleContent"></p> 
                 </div>
                 <div id="articleTwo" class="article">
-                  <h2 class="articleTitle" id="articleTwoTitle"></h2>
+                  <h2 class="articleTitle" id="articleTwoTitle"></h2> <img id="articleTwoImg" class="articleImg" src="">
                   <h3 class = "articleSubtitle"><span id="articleTwoAuthor" class="articleAuthor"></span><br><a target="blank" class="articleLink" id="articleTwoLink" href=""></a></h3>
                   <p id="articleTwoContent" class="articleContent"></p>
                 </div>
                 <div id="articleThree" class="article">
-                  <h2 class="articleTitle" id="articleThreeTitle"></h2>
+                  <h2 class="articleTitle" id="articleThreeTitle"></h2> <img id="articleThreeImg" class="articleImg" src="">
                   <h3 class = "articleSubtitle"><span id="articleThreeAuthor" class="articleAuthor"></span><br><a target="blank" class="articleLink" id="articleThreeLink" href=""></a></h3>
                   <p id="articleThreeContent" class="articleContent"></p>
                 </div>
-
+              
             </div>
-
+            
           </div>
+          <hr class="modalRule" id="finalRule">
+          <footer>
+            Flags provided by www.icondrawer.com
+            
+          </footer>
         </div>
         
 
