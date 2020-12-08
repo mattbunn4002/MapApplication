@@ -3,24 +3,8 @@ let southWest = L.latLng(-84.7, -178);
 let bounds = L.latLngBounds(southWest, northEast);    //Defines bounds for map so it doesn't repeat and cause problems with coords out of correct range.
 let mymap = L.map("mapid", {minZoom: 3, maxZoom: 15, worldCopyJump: true}).setView([51.5074, 0.1278], 7);    //Defines map and map marker.
 let border;
-let capitalsCoords = [];
 
-$.getJSON("libs/capitalCities.json", function(data) {
-    for (let i=0;i< data.length; i++) {
-        let coords = [data[i]["CapitalName"], data[i]["CapitalLatitude"], data[i]["CapitalLongitude"]];
-        capitalsCoords.push(coords);
-    }
-    
-});
 
-console.log(capitalsCoords);
-
-capitalsCoords.forEach(entry => {
-    console.log("test");
-    marker = new L.marker([entry[1], entry[2]])
-      .bindPopup(entry[0])
-      .addTo(mymap);
-});
     
       
 
@@ -129,12 +113,14 @@ mymap.on("click", onMapClick);    //Binds onMapClick to click events on the map.
 
 function updateModal(countryName) {   /* Changes the content of the modal (does not make it fade in) */
     $("#modalTitle").html(countryName);
-    console.log(countryName);
+    
     let countryFeature = findFeatureFromName(countryName);
     let lat;
     let lng;
     let capital;
-    let countryCode = countryFeature["properties"]["iso_a2"];
+    let currencyCode;
+    let countryCodeISO2 = countryFeature["properties"]["iso_a2"];
+    let countryCodeISO3 = countryFeature["properties"]["iso_a3"];
     let flagURL = "libs/img/flags/flags/48/" + countryName + ".png";
     $('#flag').attr('src', flagURL);
 
@@ -159,7 +145,7 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
         async: false,
         dataType: "json",
         data: {
-            countryCode: countryCode,
+            countryCode: countryCodeISO2,
         },
         success: function(result) {
            
@@ -167,7 +153,7 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
                 
                 $("#region").html(result["data"]["continent"]);
                 $("#subregion").html(result["data"]["subregion"]);
-                $("#countryCode").html(countryCode);
+                $("#countryCode").html(countryCodeISO2);
                 $("#nationality").html(result["data"]["nationality"]);
                 $("#weekStart").html(result["data"]["start_of_week"]);
                 lat = result["data"]["geo"]["latitude"];
@@ -177,6 +163,8 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
                 
         }
     })
+    
+
     $.ajax({            
         url: "libs/php/getMoreBasicInfo.php",                   //Gets more info for general info section.
         type: "GET",
@@ -189,15 +177,16 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
             
 
             if (result.status.name == "ok") {
+                
                 if (countryName == "India" || countryName == "South Korea") {                   //Fix for weird india json entry in api.
                     capital = result["data"][1]["capital"];
-                    
-                    
+                    currencyCode = result["data"][1]["currencies"][0]["code"];
                     $("#language").html(result["data"][1]["languages"][0]["name"]);
                     $("#capital").html(capital);
                     $("#population").html(result["data"][1]["population"].toLocaleString('en', {useGrouping:true}));
                     $("#currency").html(result["data"][1]["currencies"][0]["name"]);
                 } else {
+                    currencyCode = result["data"][0]["currencies"][0]["code"];
                     capital = result["data"][0]["capital"];
                     $("#language").html(result["data"][0]["languages"][0]["name"]);
                     $("#capital").html(capital);
@@ -211,6 +200,23 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
         }
         
     });
+    $.ajax({            
+        url: "libs/php/getExchangeRate.php",      //Gets exchange rate.
+        type: "GET",
+        async: false,
+        dataType: "json",
+        data: {
+            
+        },
+        success: function(result) {
+           
+            if (result.status.name == "ok") {
+                let exchangeRate = result["data"]["rates"][currencyCode];
+                $("#exchangeRate").html(exchangeRate);
+            }
+                
+        }
+    })
     
 
     $.ajax({            

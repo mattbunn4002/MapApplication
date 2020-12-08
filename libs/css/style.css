@@ -16,7 +16,8 @@ html, body {
 
 #mainTitle {
   color: rgb(243, 92, 81);
-  font-size: 1.2em;
+  font-size: 1.3em;
+  font-weight: bold;
   
 }
 
@@ -102,6 +103,13 @@ html, body {
 #modalInfoBox ul li {
   margin: 5px;
 }
+.infoName {
+  
+}
+
+.info {
+  font-weight: bolder;
+}
 
 
 
@@ -126,14 +134,27 @@ html, body {
     font-size: 0.6em;
   }
 
+  
+
   #mainTitle {
     font-size: 1em;
   }
 
-  
+  .conditionImg, #isDay {
+    width: 50px;
+  }
 
   #flag {
     height: 65%;
+  }
+
+  progress[value] {
+    /* Reset the default appearance */
+    -webkit-appearance: none;
+    appearance: none;
+    width: 40%;
+    padding-left: 20px;
+    margin-left: 1%;
   }
 
   
@@ -245,7 +266,7 @@ progress[value]::-webkit-progress-value {   /* Styles the filled in part of the 
 
 .article {
   margin-top: 5%;
-  padding: 4%;
+  padding: 4% 4% 8% 4%;
   background-color: rgb(165, 165, 165);
   color: black;
   border-radius: 1px;
@@ -263,7 +284,8 @@ progress[value]::-webkit-progress-value {   /* Styles the filled in part of the 
 
 footer {
   margin: 4%;
-  font-style: italic;
+  font-size: 0.8em;
+  color: lightgray;
 }
 
 
@@ -371,7 +393,13 @@ footer {
   text-overflow: '';
 }
 
+footer p {
+  margin: 2% 0;
+}
 
+#articleThree {
+  margin-bottom: 2.5%;
+}
 
 
 
