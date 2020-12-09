@@ -167,6 +167,9 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
            
             if (result.status.name == "ok") {
                 
+                if (!result["data"]["geo"]) {
+                    return;
+                }
                 $("#region").html(result["data"]["continent"]);
                 $("#subregion").html(result["data"]["subregion"]);
                 $("#countryCode").html(countryCodeISO2);
@@ -193,6 +196,9 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
             
 
             if (result.status.name == "ok") {
+                if (!result["data"][0]) {
+                    return;
+                }
                 
                 if (countryName == "India" || countryName == "South Korea") {                   //Fix for weird india json entry in api.
                     capital = result["data"][1]["capital"];
@@ -227,6 +233,9 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
         success: function(result) {
            
             if (result.status.name == "ok") {
+                if (!result["data"]["rates"]) {
+                    return;
+                }
                 let exchangeRate = result["data"]["rates"][currencyCode];
                 $("#exchangeRate").html(exchangeRate);
             }
@@ -245,6 +254,9 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
         success: function(result) {
             
             if (result.status.name == "ok") {
+                if (!result["data"]["current"]) {
+                    return;
+                }
                 
                 $("#weatherCapital").html(capital);
                 $("#condition").html(result["data"]["current"]["condition"]["text"]);
@@ -284,6 +296,9 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
         success: function(result) {
             
             if (result.status.name == "ok") {
+                if (!result["data"]["time"]) {
+                    return;
+                }
                 $("#timezoneCapital").html(capital);
                 $("#localTime").html(result["data"]["time"]);
                 $("#timezoneId").html(result["data"]["timezoneId"]);
@@ -363,7 +378,11 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
         },
         success: function(result) {
             
-            if (result.status.name == "ok") {
+            if ((result.status.name == "ok") && (result["data"])){
+                
+                if (!result["data"]["forecast"]) {
+                    return;
+                }
                 const today = new Date();
                 const tomorrow = new Date(today);
                 tomorrow.setDate(tomorrow.getDate() + 1);
