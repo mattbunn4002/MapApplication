@@ -66,7 +66,7 @@ function articleDisplayFunc(articleArray) {
     } else {
         $("#articleTwo").css("display", "none");
     }
-    if (articleArray[10]) {
+    if (articleArray[8]) {
         $("#articleThree").css("display", "block");
     } else {
         $("#articleThree").css("display", "none");
@@ -330,12 +330,12 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
                         $("#articleTwoImg").attr("src", result["data"]["articles"][5]["urlToImage"]);
                     
                         if (result["data"]["articles"][8]) {
-                            $("#articleThreeTitle").html(result["data"]["articles"][10]["title"]);
-                            $("#articleThreeAuthor").html(result["data"]["articles"][10]["author"]);
-                            $("#articleThreeLink").attr("href", result["data"]["articles"][10]["url"]);
-                            $("#articleThreeLink").html(result["data"]["articles"][10]["url"]);
-                            $("#articleThreeContent").html(result["data"]["articles"][10]["description"]);
-                            $("#articleThreeImg").attr("src", result["data"]["articles"][10]["urlToImage"]);
+                            $("#articleThreeTitle").html(result["data"]["articles"][8]["title"]);
+                            $("#articleThreeAuthor").html(result["data"]["articles"][8]["author"]);
+                            $("#articleThreeLink").attr("href", result["data"]["articles"][8]["url"]);
+                            $("#articleThreeLink").html(result["data"]["articles"][8]["url"]);
+                            $("#articleThreeContent").html(result["data"]["articles"][8]["description"]);
+                            $("#articleThreeImg").attr("src", result["data"]["articles"][8]["urlToImage"]);
                         }   
                     }
                 }
