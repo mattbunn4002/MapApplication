@@ -310,7 +310,9 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
             
             if (result.status.name == "ok") {
                 
-                
+                if (!result["data"]["articles"]) {
+                    return;
+                }
 
                 articleDisplayFunc(result["data"]["articles"]);
                 if (result["data"]["articles"][0]) {
