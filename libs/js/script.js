@@ -121,9 +121,12 @@ mymap.on("click", onMapClick);    //Binds onMapClick to click events on the map.
 
 
 function updateModal(countryName) {   /* Changes the content of the modal (does not make it fade in) */
-    
+    if (countryName == "S. Sudan") {
+        countryName = "Sudan";
+    }
     
     let countryFeature = findFeatureFromName(countryName);
+    
     if (!countryFeature) {
         return;
     }
