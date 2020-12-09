@@ -10,8 +10,7 @@ for (index in capitalCities) {
     let entry = [capitalCities[index]["CapitalName"], capitalCities[index]["CapitalLatitude"], capitalCities[index]["CapitalLongitude"]];
     capitalCoords.push(entry);
 }
-    
-console.log(capitalCoords);
+
 
 for (let i = 0; i < capitalCoords.length; i++) {
     marker = new L.marker([capitalCoords[i][1], capitalCoords[i][2]]).on("click", onMapClick)
