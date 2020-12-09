@@ -2,8 +2,7 @@
 
 $executionStartTime = microtime(true) / 1000;
 
-$url= "api.ipgeolocationapi.com/countries/" . rawurlencode($_REQUEST["countryCode"]);
-
+$url= "api.ipgeolocationapi.com/countries/" . rawurlencode($_REQUEST["countryCode"]); //
 
 
 $ch = curl_init();
@@ -15,7 +14,7 @@ $result=curl_exec($ch);
 
 curl_close($ch);
 
-$decode = json_decode($result, true);
+$decode = json_decode($result, true);  //
 
 $output['status']['code'] = "200";
 $output['status']['name'] = "ok";

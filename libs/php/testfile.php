@@ -3,7 +3,22 @@
 $executionStartTime = microtime(true) / 1000;
 
 
-$urlBasicInfo= "api.ipgeolocationapi.com/countries/" . rawurlencode($_REQUEST["countryCode"]);
+$urlBasicInfo= "api.ipgeolocationapi.com/countries/" . rawurlencode($_REQUEST["countryCode"]);   //Gets countrycode, nationality, continent, subregion, etc.
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_URL, $url);
+
+$result=curl_exec($ch);
+
+curl_close($ch);
+
+$basicInfo = json_decode($result, true);  // 
+
+
+$urlCoordsFromCountryName = "https://api.opencagedata.com/geocode/v1/json?key=297c438b28c94b24831f523213c7ea8e&q=" . rawurlencode($_REQUEST['countryName'])
+. "&no_annotations=1"; 
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

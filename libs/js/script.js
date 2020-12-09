@@ -3,11 +3,21 @@ let southWest = L.latLng(-84.7, -178);
 let bounds = L.latLngBounds(southWest, northEast);    //Defines bounds for map so it doesn't repeat and cause problems with coords out of correct range.
 let mymap = L.map("mapid", {minZoom: 3, maxZoom: 15, worldCopyJump: true}).setView([51.5074, 0.1278], 7);    //Defines map and map marker.
 let border;
+let capitalCoords = [];
 
-
+for (index in capitalCities) {
     
-      
+    let entry = [capitalCities[index]["CapitalName"], capitalCities[index]["CapitalLatitude"], capitalCities[index]["CapitalLongitude"]];
+    capitalCoords.push(entry);
+}
+    
+console.log(capitalCoords);
 
+for (let i = 0; i < capitalCoords.length; i++) {
+    marker = new L.marker([capitalCoords[i][1], capitalCoords[i][2]]).on("click", onMapClick)
+      .bindPopup(capitalCoords[i][0])
+      .addTo(mymap);
+  }
 
 
 
@@ -90,7 +100,7 @@ function onMapClick(e) {      //Handles clicking on the map.
                 let countryName = result["data"]["results"][0]["components"]["country"];
                 updateModal(countryName);
                 addCountryBorder(countryName);
-                if (countryName) {
+                if (findFeatureFromName(countryName)) {
                     
                     $("#innerSelect").val(countryName);
                     $("#modal").fadeIn(200);
@@ -112,9 +122,13 @@ mymap.on("click", onMapClick);    //Binds onMapClick to click events on the map.
 
 
 function updateModal(countryName) {   /* Changes the content of the modal (does not make it fade in) */
-    $("#modalTitle").html(countryName);
+    
     
     let countryFeature = findFeatureFromName(countryName);
+    if (!countryFeature) {
+        return;
+    }
+    $("#modalTitle").html(countryName);
     let lat;
     let lng;
     let capital;
@@ -488,7 +502,9 @@ function addCountryBorder(countryName) {
             let features = result["features"];
 
             let countryFeature = findFeatureFromName(countryName);
-            
+            if (!countryFeature) {
+                return;
+            }
             if (border) {
                 mymap.removeLayer(border);
             }
