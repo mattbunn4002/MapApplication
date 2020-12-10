@@ -4,19 +4,33 @@ let bounds = L.latLngBounds(southWest, northEast);    //Defines bounds for map s
 let mymap = L.map("mapid", {minZoom: 3, maxZoom: 15, worldCopyJump: true}).setView([51.5074, 0.1278], 7);    //Defines map and map marker.
 let border;
 let capitalCoords = [];
+let marker;
+let starIcon = L.icon({     //Defines capital city icon
+    iconUrl: 'libs/img/star.png',
+    shadowUrl: '',
 
-for (index in capitalCities) {
-    
-    let entry = [capitalCities[index]["CapitalName"], capitalCities[index]["CapitalLatitude"], capitalCities[index]["CapitalLongitude"]];
-    capitalCoords.push(entry);
+    iconSize:     [25, 25], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [14, 13], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+
+function displayCapitalMarker(capitalName) {
+    console.log(capitalName);
+    let index = capitalCities.findIndex(element => element["CapitalName"] == capitalName);
+    if (index == -1) {
+        return;      //exits func if capital city not matched
+    }
+    if (marker) {     //Removes previous marker
+        mymap.removeLayer(marker);
+    }
+    marker = new L.marker([ capitalCities[index]["CapitalLatitude"], capitalCities[index]["CapitalLongitude"] ], {icon: starIcon}).on("click", onMapClick)
+      .bindPopup(capitalCities[index]["CapitalName"])      //Adds capital city marker
+      .addTo(mymap);
 }
 
-
-for (let i = 0; i < capitalCoords.length; i++) {
-    marker = new L.marker([capitalCoords[i][1], capitalCoords[i][2]]).on("click", onMapClick)
-      .bindPopup(capitalCoords[i][0])
-      .addTo(mymap);
-  }
 
 
 
@@ -215,6 +229,7 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
                     $("#population").html(result["data"][0]["population"].toLocaleString('en', {useGrouping:true}));
                     $("#currency").html(result["data"][0]["currencies"][0]["name"]);
                 }
+                displayCapitalMarker(capital);   //calls the func that displays the capital city marker.
             }
                 
         }, error: function(jqXHR, textStatus, errorThrown) {
