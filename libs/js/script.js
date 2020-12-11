@@ -3,33 +3,40 @@ let southWest = L.latLng(-84.7, -178);
 let bounds = L.latLngBounds(southWest, northEast);    //Defines bounds for map so it doesn't repeat and cause problems with coords out of correct range.
 let mymap = L.map("mapid", {minZoom: 3, maxZoom: 15, worldCopyJump: true}).setView([51.5074, 0.1278], 7);    //Defines map and map marker.
 let border;
-let capitalCoords = [];
 let marker;
+let markers;
 let starIcon = L.icon({     //Defines capital city icon
     iconUrl: 'libs/img/star.png',
     shadowUrl: '',
+    iconSize:     [25, 25], 
+    shadowSize:   [50, 64], 
+    iconAnchor:   [14, 13], 
+    shadowAnchor: [4, 62],  
+    popupAnchor:  [0, 0] 
+});
 
-    iconSize:     [25, 25], // size of the icon
-    shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [14, 13], // point of the icon which will correspond to marker's location
-    shadowAnchor: [4, 62],  // the same for the shadow
-    popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+let cityIcon = L.icon({     //Defines city icon
+    iconUrl: 'libs/img/cityMarker.png',
+    shadowUrl: '',
+    iconSize:     [25, 25], 
+    shadowSize:   [50, 64], 
+    iconAnchor:   [14, 13], 
+    shadowAnchor: [4, 62],  
+    popupAnchor:  [0, 0] 
+});
+
+let peakIcon = L.icon({     //Defines city icon
+    iconUrl: 'libs/img/peakMarker.png',
+    shadowUrl: '',
+    iconSize:     [25, 25], 
+    shadowSize:   [50, 64], 
+    iconAnchor:   [14, 13], 
+    shadowAnchor: [4, 62],  
+    popupAnchor:  [0, 0] 
 });
 
 
-function displayCapitalMarker(capitalName) {
-    console.log(capitalName);
-    let index = capitalCities.findIndex(element => element["CapitalName"] == capitalName);
-    if (index == -1) {
-        return;      //exits func if capital city not matched
-    }
-    if (marker) {     //Removes previous marker
-        mymap.removeLayer(marker);
-    }
-    marker = new L.marker([ capitalCities[index]["CapitalLatitude"], capitalCities[index]["CapitalLongitude"] ], {icon: starIcon}).on("click", onMapClick)
-      .bindPopup(capitalCities[index]["CapitalName"])      //Adds capital city marker
-      .addTo(mymap);
-}
+
 
 
 
@@ -170,27 +177,64 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
 
 
     $.ajax({            
-        url: "libs/php/getBasicInfo.php",      //Gets info for general info section.
+        url: "libs/php/getBasicInfo.php",      //Gets info for general info section.   
         type: "GET",
         async: false,
         dataType: "json",
         data: {
             countryCode: countryCodeISO2,
+            countryName: countryName,
         },
         success: function(result) {
            
             if (result.status.name == "ok") {
+
                 
-                if (!result["data"]["geo"]) {
+
+                if (markers) {
+                    mymap.removeLayer(markers); //Removes markers of previous country clicked.
+                }
+
+                markers = new L.layerGroup();    //The following section creates all city markers for current country.
+
+                for (let i=0; i<result["data"]["importantPlaces"]["geonames"].length; i++) {
+                    
+                    if ((result["data"]["importantPlaces"]["geonames"][i]["fcode"] == "PPLC") && result["data"]["importantPlaces"]["geonames"][i]["population"] > 50000) {
+                        
+                        marker = new L.marker([result["data"]["importantPlaces"]["geonames"][i]["lat"], result["data"]["importantPlaces"]["geonames"][i]["lng"]], {icon: starIcon})
+                      .bindPopup(result["data"]["importantPlaces"]["geonames"][i]["name"] + ", population: " + result["data"]["importantPlaces"]["geonames"][i]["population"] + ", lat: " + result["data"]["importantPlaces"]["geonames"][i]["lat"] + ", lng: " + result["data"]["importantPlaces"]["geonames"][i]["lng"])
+                      .addTo(markers);
+                      markers.addTo(mymap);
+                        continue;
+                    }
+
+
+                    marker = new L.marker([result["data"]["importantPlaces"]["geonames"][i]["lat"], result["data"]["importantPlaces"]["geonames"][i]["lng"]], {icon: cityIcon})
+                      .bindPopup(result["data"]["importantPlaces"]["geonames"][i]["name"] + ", population: " + result["data"]["importantPlaces"]["geonames"][i]["population"] + ", lat: " + result["data"]["importantPlaces"]["geonames"][i]["lat"] + ", lng: " + result["data"]["importantPlaces"]["geonames"][i]["lng"])
+                      .addTo(markers);
+                      markers.addTo(mymap);
+                }
+
+                for (let i=0; i< result["data"]["peaks"]["geonames"].length; i++) {
+                    marker = new L.marker([result["data"]["peaks"]["geonames"][i]["lat"], result["data"]["peaks"]["geonames"][i]["lng"]], {icon: peakIcon})
+                      .bindPopup(result["data"]["peaks"]["geonames"][i]["name"] + ", Mountain range")
+                      .addTo(markers);
+                      markers.addTo(mymap);
+                }
+                    
+                
+                    
+                
+                if (!result["data"]["basicInfo"]["geo"]) {
                     return;
                 }
-                $("#region").html(result["data"]["continent"]);
-                $("#subregion").html(result["data"]["subregion"]);
+                $("#region").html(result["data"]["basicInfo"]["continent"]);
+                $("#subregion").html(result["data"]["basicInfo"]["subregion"]);
                 $("#countryCode").html(countryCodeISO2);
-                $("#nationality").html(result["data"]["nationality"]);
-                $("#weekStart").html(result["data"]["start_of_week"]);
-                lat = result["data"]["geo"]["latitude"];
-                lng = result["data"]["geo"]["longitude"];
+                $("#nationality").html(result["data"]["basicInfo"]["nationality"]);
+                $("#weekStart").html(result["data"]["basicInfo"]["start_of_week"]);
+                lat = result["data"]["basicInfo"]["geo"]["latitude"];
+                lng = result["data"]["basicInfo"]["geo"]["longitude"];
                 
             }
                 
@@ -229,7 +273,7 @@ function updateModal(countryName) {   /* Changes the content of the modal (does 
                     $("#population").html(result["data"][0]["population"].toLocaleString('en', {useGrouping:true}));
                     $("#currency").html(result["data"][0]["currencies"][0]["name"]);
                 }
-                displayCapitalMarker(capital);   //calls the func that displays the capital city marker.
+                
             }
                 
         }, error: function(jqXHR, textStatus, errorThrown) {
